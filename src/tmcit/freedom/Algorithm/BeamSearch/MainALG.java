@@ -1,4 +1,4 @@
-package tmcit.freedom.Algorithm;
+package tmcit.freedom.Algorithm.BeamSearch;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class MainALG {
 				for(int i = 0; i < 4; i++){
 					AnswerData d = ad.getClone();
 					int bool = d.setNext(i);
-					if(bool == -1)continue;//失敗
+					if(bool == -1)continue;//失�?
 					if(bool == 1){//ゴール
 //						System.out.println("GOAL");
 						this.setStartOff(d);
