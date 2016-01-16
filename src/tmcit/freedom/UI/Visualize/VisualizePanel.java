@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import tmcit.freedom.Algorithm.MyThread;
+import tmcit.freedom.Algorithm.BeamSearch.MyThread;
 import tmcit.freedom.System.Answer;
 import tmcit.freedom.System.Problem;
 import tmcit.freedom.System.ProblemManager;

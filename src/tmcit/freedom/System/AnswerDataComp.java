@@ -2,7 +2,7 @@ package tmcit.freedom.System;
 
 import java.util.Comparator;
 
-import tmcit.freedom.Algorithm.AnswerData;
+import tmcit.freedom.Algorithm.BeamSearch.AnswerData;
 
 public class AnswerDataComp implements Comparator<AnswerData> {
 
