@@ -120,24 +120,38 @@ public class Evaluater {
 		return distanceSG[atY + 1][atX + 1]*nowCoolP;
 	}
 	
+	private static FastQueue fastQueueX = new FastQueue(32*32*2);
+	private static FastQueue fastQueueY = new FastQueue(32*32*2);
+	private static long[][] memo = new long[32][32];
+	private static long id = 1;
+	
 	private boolean canReachGoal(){
-		Queue<Pair> que = new ArrayDeque<Pair>();
-		boolean[][] memo = new boolean[32][32];
-		que.add(new Pair(atX, atY));
-		while(que.isEmpty() == false){
-			Pair p = que.poll();
-			int x = p.p1;
-			int y = p.p2;
-			if(this.board[y + 1][x + 1] == PipeType.GOL)return true;
+		if(id==1){
+			////memo initialize
+			for(int i = 0;i < 32;i++)
+				for(int j = 0;j < 32;j++)memo[i][j] = 0;
+		}
+		////BFS O(32*32)
+		fastQueueX.clear();
+		fastQueueY.clear();
+		fastQueueX.push(atX);
+		fastQueueY.push(atY);
+		boolean result = false;
+		while(fastQueueX.size()!=0){
+			int x = fastQueueX.pop();
+			int y = fastQueueY.pop();
+			if(this.board[y + 1][x + 1] == PipeType.GOL){result = true;break;}
 			if(this.board[y + 1][x + 1] != PipeType.EMP)continue;
-			if(memo[x + 1][y + 1])continue;
-			memo[x + 1][y + 1] = true;
+			if(memo[x + 1][y + 1] == id)continue;
+			memo[x + 1][y + 1] = id;
 			for(int i = 0; i < 4; i++){
-				if(memo[x + dirX[i] + 1][y + dirY[i] + 1])continue;
-				que.add(new Pair(x + dirX[i], y + dirY[i]));
+				if(memo[x + dirX[i] + 1][y + dirY[i] + 1] == id)continue;
+				fastQueueX.push(x + dirX[i]);
+				fastQueueY.push(y + dirY[i]);
 			}
 		}
-		return false;
+		id++;
+		return result;
 	}
 	
 	
