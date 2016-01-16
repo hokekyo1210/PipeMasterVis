@@ -17,9 +17,11 @@ public class MyThread extends Thread{
 	private MainALG algorithm;
 	
 	public void run(){
+		long startTime = System.currentTimeMillis();
 		this.algorithm = new MainALG(problem);
-		
 		this.algorithm.start();
+		long endTime = System.currentTimeMillis();
+		System.out.println(endTime-startTime + " ms");
 
 		PriorityQueue<AnswerData> que = this.algorithm.getAnswerData();
 		while(que.isEmpty() == false){
