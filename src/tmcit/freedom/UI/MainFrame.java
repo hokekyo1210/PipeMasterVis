@@ -193,16 +193,15 @@ public class MainFrame extends JFrame implements ActionListener {
 				label.setForeground(Color.BLACK);
 			}
 			JOptionPane.showMessageDialog(this, label);
-		}
-
-		int num = ProblemDownloader.getProblemNum();
-		for(int i = 0; i < num; i++){
-			String file = ProblemDownloader.getFileName(i + 1);
-			if(text.equals(file)){
-				this.openProblem(ProblemDownloader.getDirectory() + file);
+		}else{
+			int num = ProblemDownloader.getProblemNum();
+			for(int i = 0; i < num; i++){
+				String file = ProblemDownloader.getFileName(i + 1);
+				if(text.equals(file)){
+					this.openProblem(ProblemDownloader.getDirectory() + file);
+				}
 			}
 		}
-
 	}
 	
 	private void openProblem(String dir){
