@@ -1,4 +1,4 @@
-package tmcit.freedom.Algorithm;
+package tmcit.freedom.Algorithm.BeamSearch;
 
 import java.util.ArrayList;
 
