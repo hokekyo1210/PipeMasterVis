@@ -1,6 +1,8 @@
 package tmcit.freedom.Algorithm.BeamSearch;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 import tmcit.freedom.Util.Pair;
@@ -16,12 +18,30 @@ public class Evaluater {
 	private static final double nowCoolP = 0.5;
 	//-80 ~ 0
 	private static final double closedP = 40.0;
+	//-100000*N~0
+	private static final double badAreaP = 100000.0; 
+	
+	private static int[] dirX = {0, 0, -1, 1};
+	private static int[] dirY = {-1, 1, 0, 0};
+	
+	/*AnswerData*/
+	private double expoint;
+	private int nowI, nowL, nowX;
+	private PipeType[][] board;
+
+	private int atX, atY, atB;
+	private int putPipeNum;
 	
 	private void startEvaluate(){
-		if(this.canReachGoal() == false){
+		if(this.canReach(atX,atY,PipeType.GOL) == false){
 			this.expoint = -9999996;
 			return;
 		}
+		if(board[atX + dirX[atB] + 1][atY + dirY[atB] + 1] == PipeType.STR){
+			////first node only
+			this.expoint += allBoardScore();
+		}
+				
 		this.expoint += this.aroundE();
 		this.expoint += this.useRateE();
 //		this.expoint += this.useRateOldE();
@@ -29,8 +49,41 @@ public class Evaluater {
 		this.expoint += this.closedPipe();
 	}
 	
-	private static int[] dirX = {0, 0, -1, 1};
-	private static int[] dirY = {-1, 1, 0, 0};
+	public double allBoardScore(){
+		double e = 0;
+		boolean[][] mem = new boolean[32][32];
+		for(int i = 0;i < 32;i++)
+		for(int j = 0;j < 32;j++){
+			if(mem[j][i])continue;
+			if(board[j][i] != PipeType.EMP)continue;
+			
+			Queue<Pair> que = new ArrayDeque<Pair>();
+			que.add(new Pair(j,i));
+			boolean goalFlag = false,startFlag = false;
+			while(!que.isEmpty()){
+				Pair p = que.poll();
+				int x = p.p1;
+				int y = p.p2;
+				if(board[x][y] == PipeType.STR)startFlag = true;
+				else if(board[x][y] == PipeType.GOL)goalFlag = true;
+				if(board[x][y] != PipeType.EMP)continue;
+				if(mem[x][y])continue;
+				mem[x][y] = true;
+				
+				for(int d = 0;d < 4;d++){
+					int tx = x + dirX[d];
+					int ty = y + dirY[d];
+					if(mem[tx][ty])continue;
+					que.add(new Pair(tx,ty));
+				}
+			}
+			if(!goalFlag||!startFlag){
+				e -= badAreaP;
+			}
+		}
+		return e;
+	}
+
 	private double aroundE(){
 		double e = 0;
 		for(int i = 0; i < 4; i++){
@@ -64,22 +117,7 @@ public class Evaluater {
 			}
 			if(pipeNum>=3){
 				e -= closedP;
-//				for(int k = 0;k<30;k++){
-//					for(int j = 0;j<30;j++){
-//						if(tx==j&&ty==k){
-//							System.out.print("X ");
-//						}else{
-//							PipeType type = this.board[k+1][j+1];
-//							///if(type==PipeType.)
-//							System.out.print(this.board[k+1][j+1]+" ");
-//						}
-//					}
-//					System.out.print("\n");
-//				}
-//				System.out.print("\n");
 			}
-//			if(b1)continue;
-//			else e -= closedP;
 		}
 		
 		return e;
@@ -125,7 +163,7 @@ public class Evaluater {
 	private static long[][] memo = new long[32][32];
 	private static long id = 1;
 	
-	private boolean canReachGoal(){
+	private boolean canReach(int sx,int sy,PipeType target){
 		if(id==1){
 			////memo initialize
 			for(int i = 0;i < 32;i++)
@@ -134,13 +172,13 @@ public class Evaluater {
 		////BFS O(32*32)
 		fastQueueX.clear();
 		fastQueueY.clear();
-		fastQueueX.push(atX);
-		fastQueueY.push(atY);
+		fastQueueX.push(sx);
+		fastQueueY.push(sy);
 		boolean result = false;
 		while(fastQueueX.size()!=0){
 			int x = fastQueueX.pop();
 			int y = fastQueueY.pop();
-			if(this.board[y + 1][x + 1] == PipeType.GOL){result = true;break;}
+			if(this.board[y + 1][x + 1] == target){result = true;break;}
 			if(this.board[y + 1][x + 1] != PipeType.EMP)continue;
 			if(memo[x + 1][y + 1] == id)continue;
 			memo[x + 1][y + 1] = id;
@@ -153,15 +191,6 @@ public class Evaluater {
 		id++;
 		return result;
 	}
-	
-	
-	/*AnswerData*/
-	private double expoint;
-	private int nowI, nowL, nowX;
-	private PipeType[][] board;
-
-	private int atX, atY, atB;
-	private int putPipeNum;
 
 	public Evaluater(AnswerData answerData){
 		this.setAnswerData(answerData);
