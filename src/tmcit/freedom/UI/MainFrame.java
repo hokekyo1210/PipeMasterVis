@@ -146,16 +146,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				);
 
 			if (option == JOptionPane.YES_OPTION){
-				this.setTitle(Main.appName);
-				if(this.tabbedpane.getSelectedIndex() == 0){//Viewer
-					this.visualizePanel.initilize();
-				}else if(this.tabbedpane.getSelectedIndex() == 1){//ProbEditor
-					this.problemPanel.initilize();
-				}else if(this.tabbedpane.getSelectedIndex() == 2){//AnswEditor
-					this.answerPanel.initilize();
-				}
-				this.requestFocusInWindow();
-				this.repaint();
+				initializeDetails();
 			}
 
 		}else if(text.equalsIgnoreCase("Reflesh")){
@@ -204,7 +195,21 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 	
+	private void initializeDetails(){
+		this.setTitle(Main.appName);
+		if(this.tabbedpane.getSelectedIndex() == 0){//Viewer
+			this.visualizePanel.initilize();
+		}else if(this.tabbedpane.getSelectedIndex() == 1){//ProbEditor
+			this.problemPanel.initilize();
+		}else if(this.tabbedpane.getSelectedIndex() == 2){//AnswEditor
+			this.answerPanel.initilize();
+		}
+		this.requestFocusInWindow();
+		this.repaint();
+	}
+	
 	private void openProblem(String dir){
+		initializeDetails();
 		if(this.tabbedpane.getSelectedIndex() == 0){
 			this.visualizePanel.readProblem(dir);
 		}else if(this.tabbedpane.getSelectedIndex() == 1){
