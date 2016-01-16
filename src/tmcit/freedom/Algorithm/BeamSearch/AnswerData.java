@@ -148,19 +148,30 @@ public class AnswerData {
 		
 	public Answer makeAnswer(){
 		Answer ans = new Answer();
-		ans.setNowI(this.nowI);
-		ans.setNowL(this.nowL);
-		ans.setNowX(this.nowX);
+		////convert real num (I to X).
+		int realI = limI-limX;
+		int overCapacityX = nowI-realI;
 		for(int i = 0; i < 30; i++){
 			for(int j = 0; j < 30; j++){
 				PipeType t = this.board[i + 1][j + 1];
 				if(PipeType.isPipe(t)){
+					if(t == PipeType.UD||t == PipeType.LR)
+					if(overCapacityX>0){
+						ans.setPipeType(j, i, PipeType.XX);
+						overCapacityX--;
+						this.nowI--;
+						this.nowX++;
+						continue;
+					}
 					ans.setPipeType(j, i, t);
 				}else{
 					ans.setPipeType(j, i, PipeType.NULL);
 				}
 			}
 		}
+		ans.setNowI(this.nowI);
+		ans.setNowL(this.nowL);
+		ans.setNowX(this.nowX);
 
 		return ans;
 	}
