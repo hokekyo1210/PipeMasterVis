@@ -14,7 +14,7 @@ import tmcit.freedom.Util.Third;
 
 public class MainALG {
 	
-	public static int beamWidth = 2000;
+	public static int beamWidth = 500;
 
 	private Problem problem;
 
@@ -124,6 +124,7 @@ public class MainALG {
 		for(Pair p : sPoints){
 			AnswerData tmp = ad.getClone();
 			tmp.setCool(p.p1, p.p2, p.p3);
+			new Evaluater(tmp);
 			this.storage.add(tmp);
 		}
 	}
