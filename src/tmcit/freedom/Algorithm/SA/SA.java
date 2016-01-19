@@ -1,11 +1,11 @@
 package tmcit.freedom.Algorithm.SA;
 
+import tmcit.freedom.Algorithm.BeamSearch.AnswerData;
+
 public class SA {
-	private Problem prob;
-	private Answer ans;
-	public SA(Problem prob,Answer ans){
-		this.prob = prob;
-		this.ans = ans;
+	private AnswerData answer;
+	public SA(AnswerData answer){
+		this.answer = answer;
 	}
 	
 	public boolean start(){
